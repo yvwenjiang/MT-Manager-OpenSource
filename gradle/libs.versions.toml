@@ -75,7 +75,7 @@ androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg
 # Kotlin / Detekt 的 API 类型，因此这些插件 jar 必须以普通依赖形式声明。
 # 注意不能用 libs.plugins.*：那个访问器返回 Provider<PluginDependency>，
 # 放进 dependencies {} 会报 "Cannot convert the provided notation to a Dependency"。
-agp = { module = "com.android.tools.build:gradle-api", version.ref = "agp" }
+agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
 detekt-gradle-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }

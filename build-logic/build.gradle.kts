@@ -5,17 +5,18 @@ plugins {
 group = "com.mtopensource.buildlogic"
 
 dependencies {
-    // 约定插件在编译期需要 AGP / Kotlin / Detekt 的 API 类型，
-    // 但它们运行时由消费方项目的 plugins {} 块提供，因此必须用 compileOnly。
+    // 约定插件里 plugins { id("com.android.application") } 需要 Gradle 在
+    // 生成类型安全访问器时真实解析并应用该插件，因此插件必须在
+    // build-logic 自身的 classpath 上，必须用 implementation（compileOnly 不足）。
     //
-    // 若改为 implementation：这些 jar 会被塞进 build-logic 的运行时 classpath，
-    // 导致根项目 build.gradle.kts 里的插件声明报
+    // 相应约束：根项目 build.gradle.kts 不能再用 alias(libs.plugins.*) apply false
+    // 重复声明这些插件，否则会报
     // "plugin is already on the classpath with an unknown version"。
     //
-    // 另外这里必须用普通库坐标，不能写 libs.plugins.*
+    // 此处必须使用普通库坐标，不能用 libs.plugins.*
     //（后者是 Provider<PluginDependency>，无法作为 Dependency 传入）。
-    compileOnly(libs.agp)
-    compileOnly(libs.kotlin.gradle.plugin)
-    compileOnly(libs.kotlin.gradle.plugin.api)
-    compileOnly(libs.detekt.gradle.plugin)
+    implementation(libs.agp)
+    implementation(libs.kotlin.gradle.plugin)
+    implementation(libs.kotlin.gradle.plugin.api)
+    implementation(libs.detekt.gradle.plugin)
 }

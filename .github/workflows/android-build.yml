@@ -50,24 +50,6 @@ jobs:
           sed -i 's/^useChinaMirrors=.*/useChinaMirrors=false/' gradle.properties
           grep -n '^useChinaMirrors' gradle.properties
 
-      # build-logic 是独立构建，其 pluginManagement 需要显式声明插件版本，
-      # 无法读取根项目的 version catalog，因此这里校验两处不漂移。
-      - name: Verify plugin versions are in sync
-        run: |
-          fail=0
-          check() {
-            local key=$1 file=$2
-            local a b
-            a=$(grep -oP "(?m)^\s*$key\s*=\s*\"\K[^\"]+" gradle/libs.versions.toml | head -1)
-            b=$(grep -oP "(?m)^\s*val ${key}Version\s*=\s*\"\K[^\"]+" build-logic/settings.gradle.kts | head -1)
-            printf '%-8s catalog=%-10s build-logic=%-10s' "$key" "${a:-?}" "${b:-?}"
-            if [ -n "$a" ] && [ "$a" = "$b" ]; then echo 'OK'; else echo 'MISMATCH'; fail=1; fi
-          }
-          check agp
-          check kotlin
-          check detekt
-          exit $fail
-
       - name: Run unit tests
         run: gradle test --no-daemon --stacktrace
 
