@@ -17,8 +17,12 @@ if (providers.gradleProperty("useChinaMirrors").getOrElse("false") == "true") {
 }
 
 dependencies {
-    compileOnly(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
-    implementation(libs.android.gradlePlugin)
-    implementation(libs.kotlin.gradlePlugin)
-    implementation(libs.detekt.gradlePlugin)
+    // 约定插件在编译期需要 AGP / Kotlin / Detekt 的 API。
+    // 使用 version catalog 的 [plugins] 段别名（libs.plugins.*），
+    // 它们会被解析为对应的 Gradle plugin marker 依赖。
+    implementation(libs.plugins.android.application)
+    implementation(libs.plugins.android.library)
+    implementation(libs.plugins.kotlin.android)
+    implementation(libs.plugins.kotlin.compose)
+    implementation(libs.plugins.detekt)
 }
