@@ -1,0 +1,15 @@
+{
+  "id": "com.mtopensource.plugin.remotestorage",
+  "name": "远程存储",
+  "version": "0.1.0",
+  "author": "MT-Manager-OpenSource Contributors",
+  "description": "通过 FTP / SFTP / WebDAV 挂载远程目录",
+  "entryClass": "com.mtopensource.plugins.remotestorage.RemoteStoragePlugin",
+  "requiredApiVersion": 1,
+  "capabilities": [
+    "REMOTE_STORAGE",
+    "CUSTOM_FILESYSTEM",
+    "NETWORK",
+    "APP_DATA"
+  ]
+}

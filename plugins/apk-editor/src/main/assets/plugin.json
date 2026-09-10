@@ -1,0 +1,14 @@
+{
+  "id": "com.mtopensource.plugin.apkeditor",
+  "name": "APK 编辑器",
+  "version": "0.1.0",
+  "author": "MT-Manager-OpenSource Contributors",
+  "description": "APK 签名校验、包信息解析与重打包",
+  "entryClass": "com.mtopensource.plugins.apkeditor.ApkEditorPlugin",
+  "requiredApiVersion": 1,
+  "capabilities": [
+    "APK_EDIT",
+    "CONTEXT_MENU",
+    "APP_DATA"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "id": "com.mtopensource.plugin.rootsupport",
+  "name": "Root 支持",
+  "version": "0.1.0",
+  "author": "MT-Manager-OpenSource Contributors",
+  "description": "以 root 权限浏览与修改系统分区文件",
+  "entryClass": "com.mtopensource.plugins.rootsupport.RootSupportPlugin",
+  "requiredApiVersion": 1,
+  "capabilities": [
+    "ROOT_FILESYSTEM",
+    "CUSTOM_FILESYSTEM",
+    "APP_DATA"
+  ]
+}

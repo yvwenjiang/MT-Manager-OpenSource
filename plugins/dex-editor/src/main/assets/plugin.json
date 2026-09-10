@@ -1,0 +1,14 @@
+{
+  "id": "com.mtopensource.plugin.dexeditor",
+  "name": "DEX 编辑器",
+  "version": "0.1.0",
+  "author": "MT-Manager-OpenSource Contributors",
+  "description": "解析 DEX 文件结构，支持方法/类列表浏览与 smali 反汇编结果查看",
+  "entryClass": "com.mtopensource.plugins.dexeditor.DexEditorPlugin",
+  "requiredApiVersion": 1,
+  "capabilities": [
+    "DEX_EDIT",
+    "CONTEXT_MENU",
+    "APP_DATA"
+  ]
+}

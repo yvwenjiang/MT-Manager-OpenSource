@@ -1,0 +1,39 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/**/build/
+
+# Android
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+local.properties
+captures/
+.cxx/
+release/
+output.json
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+.vscode/
+*.hprof
+
+# Logs / OS
+*.log
+.DS_Store
+Thumbs.db
+
+# Keystore（切勿提交签名文件）
+*.jks
+*.keystore
+keystore.properties
+
+# Detekt
+config/detekt/baseline.xml
