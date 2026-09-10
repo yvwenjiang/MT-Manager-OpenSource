@@ -69,6 +69,17 @@ commons-compress = { module = "org.apache.commons:commons-compress", version.ref
 zip4j = { module = "net.lingala.zip4j:zip4j", version.ref = "zip4j" }
 androidsvg = { module = "com.caverock:androidsvg-aar", version.ref = "androidsvg" }
 
+# buildSrc 编译期依赖
+#
+# 约定插件（buildSrc/src/main/kotlin/*.gradle.kts）需要直接引用 AGP /
+# Kotlin / Detekt 的 API 类型，因此这些插件 jar 必须以普通依赖形式声明。
+# 注意不能用 libs.plugins.*：那个访问器返回 Provider<PluginDependency>，
+# 放进 dependencies {} 会报 "Cannot convert the provided notation to a Dependency"。
+agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradle-plugin-api = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin-api", version.ref = "kotlin" }
+detekt-gradle-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+
 # Test
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidxTestJunit" }
