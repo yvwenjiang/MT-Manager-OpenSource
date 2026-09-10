@@ -1,23 +1,23 @@
 rootProject.name = "build-logic"
 
-// build-logic 是一个独立构建（composite build），
-// 看不到根项目的仓库与 version catalog，需要自己声明一份。
+// build-logic 是独立构建（composite build），看不到根项目的仓库与
+// version catalog，需要自己声明一份。
 //
-// 为什么这里不能直接读 ../gradle/libs.versions.toml 里的版本号：
-// pluginManagement {} 在 settings 执行的最早期就被求值，
-// 此时 VersionCatalogsExtension 尚未注册（实测报
-// "Extension of type 'VersionCatalogsExtension' does not exist"），
-// 而简易的 Properties 解析又会被 catalog 中 [libraries] 段的同名键覆盖。
-// 因此这里显式声明版本，且与 gradle/libs.versions.toml 中的
-// versions.agp / versions.kotlin / versions.detekt 保持一致。
+// 为什么不在这里直接读 ../gradle/libs.versions.toml 取版本号：
+//  1. pluginManagement {} 在 settings 求值最早期执行，此时
+//     VersionCatalogsExtension 尚未注册（实测报
+//     "Extension of type 'VersionCatalogsExtension' does not exist"）；
+//  2. 用简易 Properties 解析会被 catalog 中 [libraries] 段的同名键覆盖；
+//  3. Kotlin DSL 分阶段编译，顶层 val 无法被 pluginManagement {} 内的
+//     代码引用（报 Unresolved reference）。
 //
-// 一致性由 build-logic/settings.gradle.kts 末尾的校验负责，
-// 版本漂移会直接导致构建失败并给出明确提示。
-val agpVersion = "8.7.3"
-val kotlinVersion = "2.1.0"
-val detektVersion = "1.23.7"
-
+// 因此版本写在此处。为避免与 gradle/libs.versions.toml 漂移，
+// CI 的 "Verify plugin versions" 步骤会对两处做一致性校验。
 pluginManagement {
+    val agpVersion = "8.7.3"
+    val kotlinVersion = "2.1.0"
+    val detektVersion = "1.23.7"
+
     repositories {
         if (providers.gradleProperty("useChinaMirrors").getOrElse("false").toBoolean()) {
             maven("https://maven.aliyun.com/repository/gradle-plugin")
@@ -52,30 +52,5 @@ dependencyResolutionManagement {
         create("libs") {
             from(files("../gradle/libs.versions.toml"))
         }
-    }
-}
-
-// 校验上面的版本常量与 catalog 一致，避免两处版本漂移而无人察觉。
-run {
-    val toml = file("../gradle/libs.versions.toml").readText()
-    val versions = Regex("""(?m)^\s*(agp|kotlin|detekt)\s*=\s*"([^"]+)"""")
-        .findAll(toml)
-        .associate { it.groupValues[1] to it.groupValues[2] }
-
-    val mismatches = buildList {
-        versions["agp"]?.takeIf { it != agpVersion }?.let {
-            add("agp: build-logic=$agpVersion, libs.versions.toml=$it")
-        }
-        versions["kotlin"]?.takeIf { it != kotlinVersion }?.let {
-            add("kotlin: build-logic=$kotlinVersion, libs.versions.toml=$it")
-        }
-        versions["detekt"]?.takeIf { it != detektVersion }?.let {
-            add("detekt: build-logic=$detektVersion, libs.versions.toml=$it")
-        }
-    }
-
-    require(mismatches.isEmpty()) {
-        "build-logic/settings.gradle.kts 中的插件版本与 gradle/libs.versions.toml 不一致：\n" +
-            mismatches.joinToString("\n") { "  - $it" }
     }
 }
