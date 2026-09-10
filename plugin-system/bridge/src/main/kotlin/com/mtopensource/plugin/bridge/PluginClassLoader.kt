@@ -27,6 +27,15 @@ class PluginClassLoader(
 
     private var delegate: ClassLoader? = null
 
+    /**
+     * 类加载用的锁。
+     *
+     * 不能使用 `ClassLoader.getClassLoadingLock(name)`：它是 protected 方法，
+     * Android SDK 的 stub 未导出，编译期即报 Unresolved reference。
+     * 这里用本类自己的锁，语义等价且跨平台可用。
+     */
+    private val loadLock = Any()
+
     /** 插件之间必须相互隔离的包前缀。 */
     private val hostSharedPrefixes = listOf(
         "com.mtopensource.plugin.api.",
@@ -42,7 +51,7 @@ class PluginClassLoader(
     )
 
     override fun loadClass(name: String, resolve: Boolean): Class<*> {
-        synchronized(getClassLoadingLock(name)) {
+        synchronized(loadLock) {
             // 1. 已加载过直接返回
             findLoadedClass(name)?.let {
                 if (resolve) resolveClass(it)
