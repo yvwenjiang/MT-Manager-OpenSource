@@ -1,8 +1,8 @@
-// AGP / Kotlin / Detekt 的版本与坐标统一由 build-logic 管理
-// （见 build-logic/build.gradle.kts 的 dependencies），
-// 这里不能再通过 alias(libs.plugins.*) apply false 重复声明，
-// 否则会报 "plugin is already on the classpath with an unknown version"。
+// build-logic 是独立的 composite build，其 classpath 不与根构建共享，
+// 因此这里可以安全地声明插件版本：子模块需要它来解析 plugins { id(...) }。
+// AGP / Detekt 已由约定插件（mtmanager.*）内部应用，无需在这里重复声明。
 plugins {
+    alias(libs.plugins.kotlin.compose) apply false
     id("mtmanager.detekt")
 }
 

@@ -1,7 +1,6 @@
 plugins {
     id("mtmanager.android.library")
-    // 版本由 build-logic 的 classpath 提供，故此处不带版本
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
